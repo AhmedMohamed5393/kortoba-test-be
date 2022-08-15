@@ -1,6 +1,6 @@
 import { IInputObject } from "../interfaces/IInputObject";
 import { logger } from "../logger";
-const tag = "movies-dashboard-be:typeValidators";
+const tag = "kortoba-test-be:typeValidators";
 export class TypeValidators {
     public arePhones(inputObjects: IInputObject[]): any {
         try {

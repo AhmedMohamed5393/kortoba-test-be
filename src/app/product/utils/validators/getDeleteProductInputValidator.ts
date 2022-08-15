@@ -1,20 +1,15 @@
 import { logger } from "../../../shared/logger";
 import { IInputValidation } from "../../../shared/interfaces/IInputValidation";
 import { TypeValidators } from "../../../shared/validators/typeValidators";
-import { ILoginRequest } from "../../models/interfaces/requests/ILoginRequest";
-const tag = "kortoba-test-be:user:loginInputValidator";
-export class LoginInputValidator implements IInputValidation {
+const tag = "kortoba-test-be:store:getDeleteProductInputValidator";
+export class GetDeleteProductInputValidator implements IInputValidation {
     private typeValidators: TypeValidators;
     constructor() { this.typeValidators = new TypeValidators(); }
-    public validateInputs(input: ILoginRequest): any {
+    public validateInputs(input: string): any {
         try {
             let errorMessages: any[] = [];
-            const isObject = this.typeValidators.areObjects([{ key: "Login Body Request Object", value: input }]);
-            const areStrings = this.typeValidators.areStrings([
-                { key: "User Name", value: input.name },
-                { key: "Password", value: input.password },
-            ]);
-            errorMessages = errorMessages.concat(isObject.errorMessages, areStrings.errorMessages);
+            const isNumber = this.typeValidators.areNumbers([{ key: "Product ID", value: Number(input) }]);
+            errorMessages = errorMessages.concat(isNumber.errorMessages);
             errorMessages = errorMessages.filter((errorMessage) => errorMessage);
             return !errorMessages.length ? true : { errorMessages };
         } catch (error) {

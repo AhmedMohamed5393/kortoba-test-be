@@ -1,7 +1,7 @@
 import { NestMiddleware } from "@nestjs/common";
 import { logger } from "../../../shared/logger";
 import { RegisterInputValidator } from "../validators/registerInputValidator";
-const tag = "movies-dashboard-be:user:registerMiddleware";
+const tag = "kortoba-test-be:user:registerMiddleware";
 export class RegisterMiddleware implements NestMiddleware {
     public use(req: any, res: any, next: () => void) {
         try {

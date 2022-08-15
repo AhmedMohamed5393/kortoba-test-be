@@ -1,1 +1,0 @@
-export interface IUpdateRateRequest { id?: number; user?: number; movie?: number; value: number; }

@@ -10,7 +10,7 @@ import { ILoginRequest } from "./models/interfaces/requests/ILoginRequest";
 import { UserServices } from "./services/userService";
 import * as bcrypt from "bcrypt";
 import { User } from "./models/entities/user.model";
-const tag = "movies-dashboard-be:user:userService";
+const tag = "kortoba-test-be:user:userService";
 @Controller("/api/user")
 export class UserService implements IService {
     private userMapper: UserMapper;
@@ -20,8 +20,8 @@ export class UserService implements IService {
     @ApiBody({
         schema: {
             type: "object",
-            properties: { name: { type: "string" }, password: { type: "string" }, birthdate: { type: "string" }, role: { type: "string" }, email: { type: "string" } },
-            example: { name: "Ahmed Mohamed", password: "hamada5393", birthdate: "1993-03-05", role: "guest", email: "ahmedmohamedalex93@gmail.com" }
+            properties: { name: { type: "string" }, password: { type: "string" }, birthdate: { type: "string" }, email: { type: "string" } },
+            example: { name: "Ahmed Mohamed", password: "hamada5393", birthdate: "1993-03-05", email: "ahmedmohamedalex93@gmail.com" }
         },
         required: true,
     })

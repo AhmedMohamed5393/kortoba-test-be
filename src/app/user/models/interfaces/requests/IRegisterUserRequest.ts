@@ -1,1 +1,1 @@
-export interface IRegisterUserRequest { name: string; password: string; birthdate: string; email: string; role: string; }
+export interface IRegisterUserRequest { name: string; password: string; birthdate: string; email: string; }

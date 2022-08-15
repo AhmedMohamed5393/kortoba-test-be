@@ -1,26 +1,22 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.component';
-import { DatabaseModule } from './app/shared/database/database.module';
-import { ConfigModule } from '@nestjs/config';
-import * as Joi from 'joi';
-import { UserModule } from './app/user/user.module';
-import { CategoryModule } from './app/category/category.module';
-import { MovieModule } from './app/movie/movie.module';
-import { RateModule } from './app/rate/rate.module';
+import { Module } from "@nestjs/common";
+import { AppController } from "./app.component";
+import { DatabaseModule } from "./app/shared/database/database.module";
+import { ConfigModule } from "@nestjs/config";
+import * as Joi from "joi";
+import { UserModule } from "./app/user/user.module";
+import { ProductModule } from "./app/product/product.module";
 @Module({
     imports: [
         UserModule,
-        CategoryModule,
-        MovieModule,
-        RateModule,
+        ProductModule,
         DatabaseModule,
         ConfigModule.forRoot({
             validationSchema: Joi.object({
-                POSTGRES_HOST: Joi.string().required(),
-                POSTGRES_PORT: Joi.number().required(),
-                POSTGRES_USER: Joi.string().required(),
-                POSTGRES_PASSWORD: Joi.string().required(),
-                POSTGRES_DB: Joi.string().required(),
+                DB_HOST: Joi.string().required(),
+                DB_PORT: Joi.number().required(),
+                DB_USER: Joi.string().required(),
+                DB_PASSWORD: Joi.string().required(),
+                DB_NAME: Joi.string().required(),
                 PORT: Joi.number(),
             }),
         }),

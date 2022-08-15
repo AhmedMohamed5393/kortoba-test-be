@@ -1,5 +1,5 @@
-# movies-dashboard-be
-Movies Dashboard backend system using Node.js and Nest.js
+# kortoba-test-be
+Kortoba Test backend system using Node.js and Nest.js
 
 # note
 1. You will find the needed environmental variables for running the application in .env.sample file but without their values

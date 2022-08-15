@@ -1,12 +1,12 @@
 import { NestMiddleware } from "@nestjs/common";
 import { logger } from "../../../shared/logger";
-import { LoginInputValidator } from "../validators/loginInputValidator";
-const tag = "kortoba-test-be:user:loginMiddleware";
-export class LoginMiddleware implements NestMiddleware {
+import { CreateProductInputValidator } from "../validators/createProductInputValidator";
+const tag = "kortoba-test-be:product:createProductMiddleware";
+export class CreateProductMiddleware implements NestMiddleware {
     public use(req: any, res: any, next: () => void) {
         try {
-            const validateRequestBody = new LoginInputValidator().validateInputs(req.body);
-            if (!validateRequestBody.errorMessages) next();
+            const validateRequestBody = new CreateProductInputValidator().validateInputs(req.body);
+            if (!validateRequestBody?.errorMessages) next();
             else {
                 const middlewareErrorMessage = { tag, message: "Invalid inputs", error: validateRequestBody.errorMessages, status: 400 };
                 logger(middlewareErrorMessage);

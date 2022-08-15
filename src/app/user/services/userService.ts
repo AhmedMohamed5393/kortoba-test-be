@@ -6,7 +6,7 @@ import { User } from "../models/entities/user.model";
 import { IUserService } from "../models/interfaces/classes/IUserService";
 import { ILoginRequest } from "../models/interfaces/requests/ILoginRequest";
 import { IRegisterUserRequest } from "../models/interfaces/requests/IRegisterUserRequest";
-const tag = "movies-dashboard-be:user:userServices";
+const tag = "kortoba-test-be:user:userServices";
 @Injectable()
 export class UserServices implements IUserService {
     constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
