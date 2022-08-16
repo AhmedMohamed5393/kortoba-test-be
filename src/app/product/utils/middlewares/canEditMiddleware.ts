@@ -11,11 +11,17 @@ export class CanEditMiddleware implements NestMiddleware {
             const productId = req.body.id || req.params.id;
             const product = await this.productService.getProduct(productId);
             const payload = this.jwtService.decode(req.cookies.token);
-            if (payload["userId"] !== product.user.id) {
+            if (!product) {
+                const middlewareErrorMessage = { tag, message: "Not Found", status: 401 };
+                logger(middlewareErrorMessage);
+                return res.status(404).json({ message: "Unauthorized" });
+            }
+            if (payload["userId"] !== product.user?.id) {
                 const middlewareErrorMessage = { tag, message: "Unauthorized", status: 401 };
                 logger(middlewareErrorMessage);
                 return res.status(401).json({ message: "Unauthorized" });
             }
+            next();
         } catch (error) {
             const middlewareErrorMessage = { tag: tag, message: "Internal Server Error", error, status: 500 };
             logger(middlewareErrorMessage);

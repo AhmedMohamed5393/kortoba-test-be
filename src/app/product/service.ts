@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Inject, Next, Post, Put, Req, Res, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Inject, Next, Post, Put, Req, Res, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiCookieAuth, ApiQuery, ApiOkResponse, ApiUnauthorizedResponse, ApiInternalServerErrorResponse, ApiParam, ApiBody, ApiCreatedResponse, ApiConsumes } from "@nestjs/swagger";
@@ -9,7 +9,6 @@ import { IProductService } from "./models/interfaces/classes/IProductService";
 import { IService } from "./models/interfaces/classes/IService";
 import { IGetAllProductsRequest } from "./models/interfaces/requests/IGetAllProductsRequest";
 import { ProductServices } from "./services/productService";
-import { FileExtender } from "./utils/fileExtender";
 const tag = "kortoba-test-be:product:productService";
 @Controller("/api/product")
 @UseGuards(AuthGuard)
@@ -57,6 +56,7 @@ export class ProductService implements IService {
         }
     }
     @ApiCookieAuth("token")
+    @ApiConsumes('multipart/form-data')
     @ApiBody({
         schema: {
             type: "object",
@@ -66,16 +66,15 @@ export class ProductService implements IService {
     @ApiCreatedResponse({ status: 201, description: "Product is created successfully" })
     @ApiUnauthorizedResponse({ status: 401, description: "Unauthorized" })
     @ApiInternalServerErrorResponse({ status: 500, description: "Can't create this product" })
-    @ApiConsumes('multipart/form-data')
-    @UseInterceptors(FileExtender)
-    @UseInterceptors(FileInterceptor('image'))
+    @UseInterceptors(FileInterceptor('file'))
     @Post("/")
-    public async createProduct(@Req() req: Request, @Res() res: Response, @Next() next: NextFunction): Promise<any> {
+    public async createProduct(@UploadedFile() file: Express.Multer.File, @Body() body: any, @Req() req: Request, @Res() res: Response): Promise<any> {
         try {
             const decodeTokenPayload = this.jwtService.decode(req.cookies.token);
-            const request = req.body;
-            request.user = decodeTokenPayload["userId"];
-            const product = await this.productService.createProduct(req.body);
+            const request = body;
+            request.image = file.originalname;
+            request.userId = decodeTokenPayload["userId"];
+            const product = await this.productService.createProduct(request);
             return res.status(200).json({ bit: "success", message: "Product are created successfully", product });
         } catch (error) {
             const createProductErrorMessage = { tag: tag + ":createProduct", message: "There is an error while creating product", error, status: 500 };
@@ -84,22 +83,24 @@ export class ProductService implements IService {
         }
     }
     @ApiCookieAuth("token")
+    @ApiConsumes('multipart/form-data')
     @ApiBody({
         schema: {
             type: "object",
-            properties: { title: { type: "string" }, image: { type: "string", format: "binary" }, price: { type: "number" } },
-        },
+            properties: { id: { type: "number" }, title: { type: "string" }, image: { type: "string", format: "binary" }, price: { type: "number" } },
+        }, 
     })
     @ApiCreatedResponse({ status: 200, description: "Product is updated successfully" })
     @ApiUnauthorizedResponse({ status: 401, description: "Unauthorized" })
     @ApiInternalServerErrorResponse({ status: 500, description: "Can't update this product" })
-    @ApiConsumes('multipart/form-data')
-    @UseInterceptors(FileExtender)
-    @UseInterceptors(FileInterceptor('image'))
+    @UseInterceptors(FileInterceptor('file'))
     @Put("/")
-    public async updateProduct(@Req() req: Request, @Res() res: Response, @Next() next: NextFunction): Promise<any> {
+    public async updateProduct(@UploadedFile() file: Express.Multer.File, @Body() body: any, @Req() req: Request, @Res() res: Response): Promise<any> {
         try {
-            await this.productService.updateProduct(req.body);
+            const request = body;
+            request.image = file.originalname;
+            if (!request.image) delete request.image;
+            await this.productService.updateProduct(request);
             return res.status(200).json({ bit: "success", message: "Product are updated successfully" });
         } catch (error) {
             const updateProductErrorMessage = { tag: tag + ":updateProduct", message: "There is an error while updating product", error, status: 500 };
