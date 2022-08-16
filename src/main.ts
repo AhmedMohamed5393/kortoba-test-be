@@ -11,6 +11,12 @@ async function bootstrap() {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
+  app.enableCors({
+    origin: "*",
+    methods: "GET, POST, PUT ,PATCH, DELETE, OPTIONS",
+    allowedHeaders: "Origin, X-Requested-With, Content-Type, Content-Language, Accept, Authorization, token, Set-Cookie, Cookie",
+    credentials: true,
+  });
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, document);
   await app.listen(port);
