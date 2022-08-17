@@ -12,7 +12,7 @@ export class CanEditMiddleware implements NestMiddleware {
             const product = await this.productService.getProduct(productId);
             const payload = this.jwtService.decode(req.cookies.token);
             if (!product) {
-                const middlewareErrorMessage = { tag, message: "Not Found", status: 401 };
+                const middlewareErrorMessage = { tag, message: "Not Found", status: 404 };
                 logger(middlewareErrorMessage);
                 return res.status(404).json({ message: "Unauthorized" });
             }

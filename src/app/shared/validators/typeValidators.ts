@@ -71,16 +71,19 @@ export class TypeValidators {
         try {
             const errorMessages = [];
             for (const inputObject of inputObjects) {
-                const invalidMimeType = !inputObject.mimetype || inputObject.mimetype.split("/")[0] !== type;
-                const invalidDestination = !inputObject.destination;
-                const invalidBuffer = !inputObject.buffer;
-                const invalidFileName = !inputObject.filename || !inputObject.originalname || typeof inputObject.filename !== "string" || typeof inputObject.originalname !== "string";
-                const invalidFieldName = !inputObject.fieldname || inputObject.fieldname !== "string";
-                const invalidPath = !inputObject.path || typeof inputObject.path !== "string";
-                const invalidSize = !inputObject.size || !Number(inputObject.size);
-                const invalidStream = !inputObject.stream;
-                if (invalidMimeType || invalidDestination || invalidBuffer || invalidFileName || invalidFieldName || invalidPath || invalidSize || invalidStream) {
-                    errorMessages.push(`Invalid File`);
+                if (!inputObject) errorMessages.push("No File exists");
+                else {
+                    const invalidMimeType = !inputObject.mimetype || inputObject.mimetype.split("/")[0] !== type;
+                    const invalidDestination = !inputObject.destination;
+                    const invalidBuffer = !inputObject.buffer;
+                    const invalidFileName = !inputObject.filename || !inputObject.originalname || typeof inputObject.filename !== "string" || typeof inputObject.originalname !== "string";
+                    const invalidFieldName = !inputObject.fieldname || inputObject.fieldname !== "string";
+                    const invalidPath = !inputObject.path || typeof inputObject.path !== "string";
+                    const invalidSize = !inputObject.size || !Number(inputObject.size);
+                    const invalidStream = !inputObject.stream;
+                    if (invalidMimeType || invalidDestination || invalidBuffer || invalidFileName || invalidFieldName || invalidPath || invalidSize || invalidStream) {
+                        errorMessages.push(`Invalid File`);
+                    }
                 }
             }
             return !errorMessages.length ? true : { errorMessages };
