@@ -5,6 +5,7 @@ const tag = "kortoba-test-be:product:createProductMiddleware";
 export class CreateProductMiddleware implements NestMiddleware {
     public use(req: any, res: any, next: () => void) {
         try {
+            console.log(req.body, req.file)
             const validateRequestBody = new CreateProductInputValidator().validateInputs(req.body);
             if (!validateRequestBody?.errorMessages) next();
             else {
